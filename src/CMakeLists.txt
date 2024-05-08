@@ -32,6 +32,7 @@ if(UNIX)  # LINUX, FREE_BSD, APPLE
       $<$<CONFIG:RelWithDebInfo>:PCM_SILENT>
     )
 
+    if(NOT LINUX)
     # libpcm.so
     add_library(PCM_SHARED SHARED pcm-core.cpp)
     # PCM_SILENT in Release* for pcm-core.cpp
@@ -48,6 +49,7 @@ if(UNIX)  # LINUX, FREE_BSD, APPLE
         target_link_libraries(PCM_SHARED PRIVATE PCM_STATIC_SILENT Threads::Threads)
     endif()
     set_target_properties(PCM_SHARED PROPERTIES OUTPUT_NAME pcm)
+    endif()
 endif()
 
 if(MSVC)
@@ -124,6 +126,10 @@ endif(SIMDJSON_IS_APPLICABLE)
 # End of SIMDJSON dependency section
 #######################
 
+if(LINUX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
+endif(LINUX)
+
 foreach(PROJECT_NAME ${PROJECT_NAMES})
     file(GLOB PROJECT_FILE ${PROJECT_NAME}.cpp)
     set(LIBS PCM_STATIC)
@@ -163,6 +169,10 @@ foreach(PROJECT_NAME ${PROJECT_NAMES})
     if(MSVC)
         target_compile_definitions(${PROJECT_NAME} PRIVATE _UNICODE UNICODE _CONSOLE) # for all, except pcm-lib and pcm-service
     endif(MSVC)
+
+    if(LINUX)
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+    endif(LINUX)
 
     target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
 endforeach(PROJECT_NAME ${PROJECT_NAMES})
