@@ -13,6 +13,7 @@ constexpr auto UNCORE_DISCOVERY_MAP_SIZE = 0x80000;
 
 UncorePMUDiscovery::UncorePMUDiscovery()
 {
+	return;
     if (safe_getenv("PCM_NO_UNCORE_PMU_DISCOVERY") == std::string("1"))
     {
         return;

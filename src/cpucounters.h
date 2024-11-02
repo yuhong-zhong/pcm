@@ -628,7 +628,6 @@ class PCM_API PCM
     static PCM * instance;
     bool programmed_core_pmu{false};
     std::vector<std::shared_ptr<SafeMsrHandle> > MSR;
-    std::vector<std::shared_ptr<ServerUncorePMUs> > serverUncorePMUs;
     std::vector<UncorePMU> pcuPMUs;
     std::vector<std::map<int32, UncorePMU> > iioPMUs;
     std::vector<std::map<int32, UncorePMU> > irpPMUs;
@@ -685,6 +684,8 @@ class PCM_API PCM
     bool linux_arch_perfmon = false;
 
 public:
+    std::vector<std::shared_ptr<ServerUncorePMUs> > serverUncorePMUs;
+
     enum { MAX_C_STATE = 10 }; // max C-state on Intel architecture
 
     //! \brief Returns true if the specified core C-state residency metric is supported
